@@ -1,4 +1,5 @@
 # taxcredit-api-func
+<<<<<<< HEAD
 
 세액공제 분석용 Azure Functions API
 
@@ -87,3 +88,6 @@ taxcredit-api-func/
 
 - [Azure Functions Node.js 문서](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node)
 - [Azure SQL Database 연결](https://docs.microsoft.com/en-us/azure/azure-sql/) 
+=======
+Azure Function 기반 세액공제 분석 API (analyze 함수 등 포함)
+>>>>>>> fd1e49640944277024d91ae7d9cd8601ee23df69
