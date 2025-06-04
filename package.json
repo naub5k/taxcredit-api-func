@@ -1,0 +1,21 @@
+{
+  "name": "taxcredit-api-func",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\"",
+    "build": "echo Building...",
+    "deploy": "func azure functionapp publish taxcredit-api-func"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "mssql": "^9.1.1"
+  },
+  "devDependencies": {
+    "azure-functions-core-tools": "^4.x"
+  },
+  "keywords": ["azure", "functions", "taxcredit"],
+  "author": "",
+  "license": "ISC",
+  "description": "Tax Credit API Functions"
+}
