@@ -398,7 +398,8 @@ const analyzeCompanyTaxCredit = (companyInfo, youthRatio = 0, socialInsuranceRat
 // ==================== 메인 API 함수 ====================
 
 module.exports = async function (context, req) {
-    context.log('🤖 세액공제 분석 API 함수 시작 - DB 조회 + 완전 분석');
+    // 기본 시작 로깅 (운영환경에서도 최소한 유지)
+    context.log('세액공제 분석 API 함수 시작');
 
     // CORS 헤더 설정
     const corsHeaders = {
@@ -437,7 +438,10 @@ module.exports = async function (context, req) {
             return;
         }
 
-        context.log(`📝 요청된 bizno: ${bizno}, youthRatio: ${youthRatio}, socialInsuranceRate: ${socialInsuranceRate}`);
+        // 개발 환경에서만 상세 파라미터 로깅
+        if (process.env.NODE_ENV === 'development') {
+            context.log(`요청 파라미터: bizno=${bizno}, youthRatio=${youthRatio}, socialInsuranceRate=${socialInsuranceRate}`);
+        }
 
         // DB 쿼리 실행
         const query = `SELECT * FROM insu_clean WHERE 사업자등록번호 = @bizno`;
@@ -471,7 +475,7 @@ module.exports = async function (context, req) {
             try {
                 aiAnalysisResult = aiAnalysis.performComprehensiveAnalysis(companyData);
             } catch (aiError) {
-                context.log.error('🚨 AI 분석 오류:', aiError.message);
+                context.log.error('AI 분석 오류:', aiError.message);
                 aiAnalysisResult = { error: aiError.message };
             }
         }
@@ -491,8 +495,7 @@ module.exports = async function (context, req) {
             ...(includeAI && { aiAnalysis: aiAnalysisResult })
         };
 
-        context.log('✅ 세액공제 분석 완료');
-        context.log(`📊 총 공제액: ${analysisResult.summary.총계.toLocaleString()}원`);
+        context.log(`분석 완료: 총 공제액 ${analysisResult.summary.총계.toLocaleString()}원`);
 
         context.res = {
             status: 200,

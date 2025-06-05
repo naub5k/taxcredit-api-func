@@ -22,23 +22,19 @@ module.exports = async function (context, req) {
   }
 
   try {
-    // 요청 파라미터 추출 및 로깅
+    // 요청 파라미터 추출
     const sido = req.query.sido || null;
     const gugun = req.query.gugun || null;
-    const bizno = req.query.bizno || null; // 사업자등록번호 추가
-    const search = req.query.search || null; // 검색어 추가 (사업장명 또는 사업자등록번호)
+    const bizno = req.query.bizno || null;
+    const search = req.query.search || null;
     const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 20; // 기본값을 20으로 변경
+    const pageSize = parseInt(req.query.pageSize) || 20;
     const offset = (page - 1) * pageSize;
     
-    context.log(`=== 파라미터 확인 ===`);
-    context.log(`sido: ${sido}`);
-    context.log(`gugun: ${gugun}`);
-    context.log(`bizno: ${bizno}`);
-    context.log(`search: ${search}`);
-    context.log(`page: ${page}`);
-    context.log(`pageSize: ${pageSize}`);
-    context.log(`offset: ${offset}`);
+    // 개발 환경에서만 상세 로깅
+    if (process.env.NODE_ENV === 'development') {
+      context.log(`파라미터: sido=${sido}, gugun=${gugun}, bizno=${bizno}, search=${search}, page=${page}`);
+    }
     
     // SQL 인젝션 방지를 위한 입력값 검증
     if (sido && !/^[가-힣a-zA-Z\s]+$/.test(sido)) {
@@ -92,13 +88,13 @@ module.exports = async function (context, req) {
       ORDER BY 사업장명
       OFFSET ${offset} ROWS FETCH NEXT ${pageSize} ROWS ONLY`;
     
-    context.log('=== 쿼리 실행 시작 ===');
-    context.log('🔍 WHERE 조건:', whereCondition);
-    context.log('🔍 집계값 쿼리:', aggregateQuery);
-    context.log('🔍 데이터 쿼리:', dataQuery.substring(0, 200) + '...');
-    
     // 성능 측정 시작
     const startTime = Date.now();
+    
+    // 개발 환경에서만 쿼리 로깅
+    if (process.env.NODE_ENV === 'development') {
+      context.log('🔍 WHERE 조건:', whereCondition);
+    }
     
     // 병렬로 두 쿼리 실행
     const [aggregateResult, dataResult] = await Promise.all([
@@ -109,27 +105,21 @@ module.exports = async function (context, req) {
     const endTime = Date.now();
     const duration = endTime - startTime;
 
-    context.log(`=== 쿼리 실행 완료 ===`);
-    context.log(`집계 결과: ${aggregateResult.recordset.length}건`);
-    context.log(`데이터 결과: ${dataResult.recordset.length}건`);
-    context.log(`실행 시간: ${duration}ms`);
+    // 기본 성능 로깅
+    context.log(`쿼리 완료: ${dataResult.recordset.length}건, ${duration}ms`);
 
     // 집계 데이터 안전하게 추출
     const aggregateData = aggregateResult.recordset[0] || {};
     const totalCount = aggregateData.totalCount || 0;
     const maxEmployeeCount = aggregateData.maxEmployeeCount || 0;
     
-    // 디버깅: 집계값과 실제 데이터 개수 비교
-    context.log(`🔍 디버깅 - 집계값: ${totalCount}, 실제 데이터: ${dataResult.recordset.length}`);
-    context.log(`🔍 집계 쿼리 결과:`, aggregateData);
-    context.log(`🔍 파라미터 - sido: "${sido}", gugun: "${gugun}"`);
-    
-    // 만약 집계값과 실제 데이터 개수가 다르면 경고
-    if (totalCount === 0 && dataResult.recordset.length > 0) {
-      context.log(`⚠️ 경고: 집계값은 0이지만 실제 데이터는 ${dataResult.recordset.length}건 존재!`);
-      // 실제 데이터 개수로 집계값 보정
-      const correctedTotalCount = dataResult.recordset.length;
-      context.log(`🔧 집계값 보정: ${totalCount} → ${correctedTotalCount}`);
+    // 집계값과 실제 데이터 개수 불일치 체크 (개발 환경에서만 상세 로깅)
+    if (process.env.NODE_ENV === 'development') {
+      context.log(`디버깅 - 집계: ${totalCount}, 실제: ${dataResult.recordset.length}`);
+      
+      if (totalCount === 0 && dataResult.recordset.length > 0) {
+        context.log(`⚠️ 집계값 불일치 감지 - 보정 필요`);
+      }
     }
     
     // 집계값 보정 (임시 해결책)
@@ -165,11 +155,10 @@ module.exports = async function (context, req) {
       }
     };
 
-    context.log(`=== 응답 데이터 구성 완료 ===`);
-    context.log(`반환 데이터 건수: ${responseData.data.length}`);
-    context.log(`총 건수: ${responseData.aggregates.totalCount}`);
-    context.log(`페이지 정보: ${responseData.pagination.page}/${responseData.pagination.totalPages}`);
-    context.log(`성능: ${responseData.meta.performance.duration}ms`);
+    // 개발 환경에서만 상세 응답 로깅
+    if (process.env.NODE_ENV === 'development') {
+      context.log(`응답: ${responseData.data.length}건, 페이지 ${responseData.pagination.page}/${responseData.pagination.totalPages}`);
+    }
 
     // 응답 반환
     context.res.status = 200;

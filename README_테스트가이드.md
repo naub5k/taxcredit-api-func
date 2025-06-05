@@ -14,10 +14,19 @@
 ## 🚀 **빠른 실행**
 
 ```bash
-# 이 폴더에서 실행
-func start
+# 🔧 패키지 설치 및 서버 시작
+npm install                  # 의존성 설치
+npm start                    # 서버 시작 (테스트 URL 표시됨)
+
+# 🧪 API 테스트 (3가지 방법)
+npm test                     # curl 기본 테스트
+npm run test-analyze         # analyze API 테스트
+npm run test-script          # Node.js 종합 테스트
+
+# 📋 명령어 도움말
+npm run help
 ```
-**API 서버 시작**: http://localhost:7071
+**API 서버**: http://localhost:7071
 
 ---
 
@@ -213,6 +222,12 @@ time curl "http://localhost:7071/api/getSampleList?bizno=1234567890"
 - DB 연결 실패: 연결 문자열 확인
 - SQL 쿼리 오류: 스키마 변경 확인
 - 메모리 부족: Azure Functions 리소스 확인
+
+### **성능 최적화 적용**
+- ✅ **로깅 최적화**: 개발환경에서만 상세 로그 출력
+- ✅ **DB 연결 최적화**: 재시도 로직 및 타임아웃 설정
+- ✅ **CORS 설정**: 모든 도메인 허용으로 접근성 향상
+- ✅ **에러 핸들링**: 구체적인 에러 메시지 제공
 
 ---
 

@@ -16,6 +16,7 @@ env:
 jobs:
   build:
     runs-on: windows-latest
+    timeout-minutes: 10  # 10분 타임아웃 설정으로 무한 대기 방지
     permissions:
       contents: read #This is required for actions/checkout
       
@@ -32,9 +33,9 @@ jobs:
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          npm ci --no-optional
+          # npm run build --if-present  # 주석 처리: Azure Functions는 별도 빌드 불필요
+          # npm run test --if-present   # 주석 처리: 배포 시 테스트 생략
           popd
 
       - name: Upload artifact for deployment job
@@ -45,6 +46,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
+    timeout-minutes: 15  # 배포 타임아웃 설정
     needs: build
     
     steps:

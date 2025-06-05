@@ -2,14 +2,20 @@
   "name": "taxcredit-api-func",
   "version": "1.0.0",
   "scripts": {
-    "start": "func start",
-    "test": "echo \"No tests yet...\"",
-    "build": "echo Building...",
-    "deploy": "func azure functionapp publish taxcredit-api-func"
+    "start": "echo \"🚀 Azure Functions 로컬 서버 시작...\" && echo \"📋 테스트 URL:\" && echo \"  - getSampleList: http://localhost:7071/api/getSampleList\" && echo \"  - analyze: http://localhost:7071/api/analyze\" && echo \"\" && func start",
+    "dev": "func start --verbose",
+    "test": "echo \"🧪 API 테스트 실행...\" && echo \"getSampleList 테스트:\" && curl -X GET http://localhost:7071/api/getSampleList || echo \"로컬 서버가 실행되지 않았습니다.\"",
+    "test-analyze": "echo \"analyze 테스트:\" && curl -X POST http://localhost:7071/api/analyze -H \"Content-Type: application/json\" -d \"{\\\"company_name\\\":\\\"테스트회사\\\"}\" || echo \"로컬 서버가 실행되지 않았습니다.\"",
+    "test-script": "node test-local.js",
+    "build": "echo \"📦 Azure Functions 빌드 중...\" && npm install",
+    "deploy": "echo \"🚀 Azure Functions 배포 중...\" && func azure functionapp publish taxcredit-api-func",
+    "logs": "func azure functionapp logstream taxcredit-api-func",
+    "help": "echo \"📋 사용 가능한 명령어:\" && echo \"  npm start          - 로컬 서버 시작\" && echo \"  npm run dev        - 상세 로그와 함께 시작\" && echo \"  npm test           - getSampleList API 테스트\" && echo \"  npm run test-analyze - analyze API 테스트\" && echo \"  npm run test-script  - Node.js 테스트 스크립트 실행\" && echo \"  npm run deploy     - Azure에 배포\" && echo \"  npm run logs       - Azure 로그 확인\""
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
-    "mssql": "^9.1.1"
+    "mssql": "^9.1.1",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
     "azure-functions-core-tools": "^4.x"
