@@ -81,13 +81,13 @@ module.exports = async function (context, req) {
       SELECT 
         MAX(ISNULL([2024], 0)) as maxEmployeeCount,
         COUNT(*) as totalCount
-      FROM Insu_sample 
+      FROM insu_clean 
       ${whereCondition}`;
     
     // 데이터 조회 쿼리 (집계 쿼리와 동일한 WHERE 조건 사용)
     const dataQuery = `
       SELECT 사업장명, 시도, 구군, 업종명, 사업자등록번호, 사업장주소, [2020], [2021], [2022], [2023], [2024]
-      FROM Insu_sample 
+      FROM insu_clean 
       ${whereCondition}
       ORDER BY 사업장명
       OFFSET ${offset} ROWS FETCH NEXT ${pageSize} ROWS ONLY`;
