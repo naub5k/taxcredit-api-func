@@ -16,10 +16,11 @@ const classifyIndustry = (industryCode) => {
   return 신성장업종코드.includes(industryCode?.substring(0,2) || "") ? "신성장서비스업" : "일반업종";
 };
 
-// 📅 경정청구 기간 확인 (5년 기준)
+// 🚨 **경정청구 기간 확인 (1차년도 기준으로 5년)**
 const checkAmendmentEligibility = (targetYear, currentDate = new Date()) => {
-  const filingDeadline = new Date(parseInt(targetYear) + 1, 2, 31);
-  const amendmentDeadline = new Date(parseInt(targetYear) + 6, 2, 31);
+  // 📅 **중요**: 경정청구는 1차년도 귀속분 기준으로만 가능
+  const filingDeadline = new Date(parseInt(targetYear) + 1, 2, 31); // 법인세 신고기한: 다음해 3월 31일
+  const amendmentDeadline = new Date(parseInt(targetYear) + 6, 2, 31); // 경정청구 기한: 1차년도 기준 5년 후
   const isEligible = currentDate <= amendmentDeadline;
   
   return {
@@ -27,7 +28,8 @@ const checkAmendmentEligibility = (targetYear, currentDate = new Date()) => {
     filingDeadline,
     amendmentDeadline,
     remainingDays: Math.max(0, Math.floor((amendmentDeadline - currentDate) / (1000 * 60 * 60 * 24))),
-    status: isEligible ? "경정청구가능" : "기간만료"
+    status: isEligible ? "경정청구가능" : "기간만료",
+    note: "2차년도, 3차년도 혜택은 1차년도 경정청구에 포함됨"
   };
 };
 
@@ -182,13 +184,15 @@ const calculateSocialInsuranceCredit = (adjustedYouthCount, othersCount, socialI
   return Math.round(socialCreditPerYear);
 };
 
-// 📅 경정청구 기한 계산 - 🎯 **TaxCreditDashboard와 동일한 로직으로 수정**
+// 🚨 **경정청구 기한 계산 - 1차년도 기준으로 모든 연도 동일 적용**
 const getAmendmentDeadlines = (year) => {
   const baseYearNum = parseInt(year);
+  // 📅 **중요**: 경정청구는 1차년도 귀속분 기준으로만 가능하므로 모든 연도 기한이 동일
+  const amendmentDeadline = new Date(baseYearNum + 6, 2, 31); // 1차년도 기준 5년 후 3월 31일
   return {
-    year1: { year: baseYearNum, deadline: new Date(baseYearNum + 6, 4, 31) },
-    year2: { year: baseYearNum + 1, deadline: new Date(baseYearNum + 7, 4, 31) },
-    year3: { year: baseYearNum + 2, deadline: new Date(baseYearNum + 8, 4, 31) }
+    year1: { year: baseYearNum, deadline: amendmentDeadline },
+    year2: { year: baseYearNum + 1, deadline: amendmentDeadline }, // 1차년도와 동일한 기한
+    year3: { year: baseYearNum + 2, deadline: amendmentDeadline }  // 1차년도와 동일한 기한
   };
 };
 
@@ -205,7 +209,8 @@ const convertDbDataToCalculationFormat = (dbData) => {
   const industry = classifyIndustry(dbData.업종코드);
   
   const employeeData = {};
-  for (let year = 2016; year <= 2025; year++) {
+          // 🚨 **2020년부터 시작 (2019년 이전은 경정청구 기한 만료)**
+        for (let year = 2020; year <= 2025; year++) {
     const yearStr = year.toString();
     const value = getYearValue(dbData, yearStr);
     

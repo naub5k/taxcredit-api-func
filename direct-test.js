@@ -36,7 +36,8 @@ function testCalculationLogic() {
   
   // 인원 데이터 변환
   const employeeData = {};
-  for (let year = 2016; year <= 2025; year++) {
+  // 🚨 **2020년부터 시작 (2019년 이전은 경정청구 기한 만료)**
+  for (let year = 2020; year <= 2025; year++) {
     const yearStr = year.toString();
     const value = mockCompanyData[yearStr] || 0;
     employeeData[yearStr] = value;

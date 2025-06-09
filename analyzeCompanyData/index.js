@@ -194,7 +194,8 @@ module.exports = async function (context, req) {
       const processed = { ...company };
       
       // 연도별 데이터 접근 편의성을 위한 정규화
-      for (let year = 2016; year <= 2025; year++) {
+      // 🚨 **2020년부터 시작 (2019년 이전은 경정청구 기한 만료)**
+  for (let year = 2020; year <= 2025; year++) {
         const yearStr = year.toString();
         const bracketYear = `[${year}]`;
         
