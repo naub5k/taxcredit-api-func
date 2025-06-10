@@ -209,8 +209,8 @@ const convertDbDataToCalculationFormat = (dbData) => {
   const industry = classifyIndustry(dbData.업종코드);
   
   const employeeData = {};
-          // 🚨 **2020년부터 시작 (2019년 이전은 경정청구 기한 만료)**
-        for (let year = 2020; year <= 2025; year++) {
+          // 🚨 **2019년부터 시작 (2019년 이전은 경정청구 기한 만료)**
+        for (let year = 2019; year <= 2025; year++) {
     const yearStr = year.toString();
     const value = getYearValue(dbData, yearStr);
     
