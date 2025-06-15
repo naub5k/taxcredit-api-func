@@ -1,13 +1,50 @@
-# 🔧 TaxCredit API Functions - 백엔드 API 서버
+# ⚡ TaxCredit API Functions - 세액공제 분석 API 서버
 
-[![Azure Functions](https://img.shields.io/badge/Azure-Functions-blue)](https://azure.microsoft.com/ko-kr/services/functions/)
-[![Node.js](https://img.shields.io/badge/Node.js-18.x-green)](https://nodejs.org/)
-[![Performance](https://img.shields.io/badge/Performance-99.8%25%20개선-brightgreen)](https://taxcredit-api-func.azurewebsites.net)
+> **배포 성공 시점**: 2025-06-16  
+> **배포 주소**: [https://taxcredit-api-func.azurewebsites.net](https://taxcredit-api-func.azurewebsites.net)
 
-> **고용세액공제 데이터 처리를 위한 고성능 서버리스 API**  
-> 400만+ 기업 데이터를 페이지 단위로 처리하는 최적화된 백엔드
+## 🎯 **프로젝트 개요**
 
----
+세액공제 분석 시스템의 백엔드 API 서버입니다. Azure Functions를 기반으로 하여 기업 데이터 분석, AI 기반 세액공제 혜택 분석, 그리고 실시간 데이터베이스 연동 기능을 제공합니다.
+
+## 📌 **배포 정보**
+
+- **배포 방식**: Azure Functions
+- **Git 기준 경로**: `taxcredit-api-func/`
+- **런타임**: Node.js 18+
+- **배포 명령어**: `npx func azure functionapp publish taxcredit-api-func`
+
+## ✅ **API 검증 방법**
+
+API가 정상적으로 작동하는지 확인하려면:
+
+1. **기본 상태 확인**: [https://taxcredit-api-func.azurewebsites.net](https://taxcredit-api-func.azurewebsites.net)
+2. **AI 분석 API 테스트**: 
+   ```bash
+   POST https://taxcredit-api-func.azurewebsites.net/api/analyze
+   Content-Type: application/json
+   
+   {
+     "bizno": "1018197530"
+   }
+   ```
+3. **응답 확인**: 정상적인 JSON 구조로 분석 결과 반환 (환수위험/추징위험/사후관리완료 등)
+
+## 🛠️ **해결된 주요 문제들**
+
+### 1. **Azure Functions 정지 문제**
+- **문제**: "Error 403 - This web app is stopped" 오류로 모든 API 중단
+- **해결**: Azure Portal에서 함수 앱 수동 재시작
+- **예방**: 적절한 모니터링 및 자동 재시작 설정
+
+### 2. **CORS 설정 문제**
+- **문제**: 프론트엔드에서 API 호출 시 CORS 오류
+- **해결**: `host.json`에서 `allowedOrigins: ["*"]` 설정
+- **보안**: 운영 환경에서는 특정 도메인만 허용하도록 변경 필요
+
+### 3. **데이터베이스 연결 최적화**
+- **문제**: 동시 연결 수 제한으로 인한 성능 저하
+- **해결**: 연결 풀링 및 캐싱 메커니즘 구현
 
 ## 🎯 **API 개요**
 
