@@ -1,6 +1,6 @@
 # ⚡ TaxCredit API Functions - 세액공제 분석 API 서버
 
-> **배포 성공 시점**: 2025-06-16  
+> **배포 완료됨 (20250616)** ✅  
 > **배포 주소**: [https://taxcredit-api-func.azurewebsites.net](https://taxcredit-api-func.azurewebsites.net)
 
 ## 🎯 **프로젝트 개요**
