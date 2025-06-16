@@ -1,7 +1,8 @@
 # ⚡ TaxCredit API Functions - 세액공제 분석 API 서버
 
-> **배포 완료됨 (20250616)** ✅  
-> **배포 주소**: [https://taxcredit-api-func.azurewebsites.net](https://taxcredit-api-func.azurewebsites.net)
+> **배포 완료됨 (20250617)** ✅  
+> **배포 주소**: [https://taxcredit-api-func.azurewebsites.net](https://taxcredit-api-func.azurewebsites.net)  
+> **CI/CD**: GitHub Actions 자동 배포 파이프라인 구축 완료 🚀
 
 ## 🎯 **프로젝트 개요**
 
@@ -9,10 +10,20 @@
 
 ## 📌 **배포 정보**
 
-- **배포 방식**: Azure Functions
+- **배포 방식**: Azure Functions + GitHub Actions CI/CD
 - **Git 기준 경로**: `taxcredit-api-func/`
-- **런타임**: Node.js 18+
-- **배포 명령어**: `npx func azure functionapp publish taxcredit-api-func`
+- **런타임**: Node.js 18+ (표준화 완료)
+- **자동 배포**: `git push origin master` 시 자동 트리거
+- **워크플로우**: `.github/workflows/main_taxcredit-api-func.yml`
+
+### **🔄 CI/CD 파이프라인 (✅ 복구 완료)**
+```yaml
+# GitHub Actions 자동 배포 설정
+- 트리거: master 브랜치 푸시
+- 환경: ubuntu-latest + Node.js 18.x
+- 빌드: npm ci && npm run build
+- 배포: Azure Functions Action v1
+```
 
 ## ✅ **API 검증 방법**
 
@@ -32,17 +43,25 @@ API가 정상적으로 작동하는지 확인하려면:
 
 ## 🛠️ **해결된 주요 문제들**
 
-### 1. **Azure Functions 정지 문제**
+### 1. **GitHub Actions CI/CD 복구** (✅ 2025-06-17 완료)
+- **문제**: 수동 배포 의존, GitHub Actions 워크플로우 불안정  
+- **해결**: 표준화된 자동 배포 파이프라인 구축
+  - `runs-on`: ubuntu-latest 적용
+  - `NODE_VERSION`: 18.x로 일관성 확보
+  - `npm ci && npm run build` 표준 빌드 과정
+- **결과**: `git push origin master` 시 완전 자동 배포
+
+### 2. **Azure Functions 정지 문제**
 - **문제**: "Error 403 - This web app is stopped" 오류로 모든 API 중단
 - **해결**: Azure Portal에서 함수 앱 수동 재시작
 - **예방**: 적절한 모니터링 및 자동 재시작 설정
 
-### 2. **CORS 설정 문제**
+### 3. **CORS 설정 문제**
 - **문제**: 프론트엔드에서 API 호출 시 CORS 오류
 - **해결**: `host.json`에서 `allowedOrigins: ["*"]` 설정
 - **보안**: 운영 환경에서는 특정 도메인만 허용하도록 변경 필요
 
-### 3. **데이터베이스 연결 최적화**
+### 4. **데이터베이스 연결 최적화**
 - **문제**: 동시 연결 수 제한으로 인한 성능 저하
 - **해결**: 연결 풀링 및 캐싱 메커니즘 구현
 

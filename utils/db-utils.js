@@ -16,8 +16,8 @@ module.exports = async function executeQuery(query, params = [], context) {
         database: process.env.DB_NAME || 'CleanDB',
         options: {
           encrypt: true,
-          connectTimeout: 60000, // 60초 타임아웃 설정
-          requestTimeout: 60000 // 쿼리 실행 타임아웃 60초
+          connectTimeout: 300000, // 300초 (5분) 타임아웃 설정
+          requestTimeout: 300000 // 쿼리 실행 타임아웃 300초 (5분)
         }
       };
       
