@@ -12,5 +12,25 @@
     "id": "Microsoft.Azure.Functions.ExtensionBundle",
     "version": "[4.*, 5.0.0)"
   },
-  "functionTimeout": "00:10:00"
+  "functionTimeout": "00:10:00",
+  "cors": {
+    "allowedOrigins": [
+      "https://polite-desert-03a31df00.6.azurestaticapps.net",
+      "https://taxcredit-visual.azurewebsites.net",
+      "https://delightful-tree-001bf4c00.5.azurestaticapps.net",
+      "http://localhost:3000",
+      "http://localhost:3001"
+    ],
+    "allowedMethods": [
+      "GET",
+      "POST",
+      "OPTIONS"
+    ],
+    "allowedHeaders": [
+      "Content-Type",
+      "Authorization",
+      "x-requested-with"
+    ],
+    "maxAge": 300
+  }
 }
