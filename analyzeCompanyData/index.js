@@ -558,6 +558,15 @@ module.exports = async function (context, req) {
       body: {
         success: true,
         
+        // 🚀 **API 버전 및 배포 정보 추가**
+        apiInfo: {
+          version: "1.0.1",
+          deployedAt: "2025-06-29",
+          endpoint: "analyzeCompanyData",
+          performance: "v15-optimized",
+          status: "🔴 LIVE"
+        },
+        
         // ✅ 기존 호환성 최우선 - 프론트엔드가 바로 사용 가능
         data: companies,
         pagination: partialPagination,
@@ -663,6 +672,16 @@ module.exports = async function (context, req) {
       },
       body: {
         success: true, // 🔧 사용자 경험 우선: 성공으로 처리
+        
+        // 🚀 **API 버전 및 배포 정보 추가**
+        apiInfo: {
+          version: "1.0.1",
+          deployedAt: "2025-06-29",
+          endpoint: "analyzeCompanyData",
+          performance: "v15-optimized",
+          status: "🔴 LIVE"
+        },
+        
         data: [], // 빈 결과 반환
         pagination: {
           page: page,

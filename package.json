@@ -1,6 +1,6 @@
 {
   "name": "taxcredit-api-func",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "start": "echo \"🚀 Azure Functions 로컬 서버 시작...\" && echo \"📋 테스트 URL:\" && echo \"  - analyze: http://localhost:7071/api/analyze\" && echo \"\" && func start",
     "dev": "func start --verbose",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
-    "axios": "^1.6.0",
+    "axios": "^1.10.0",
     "mssql": "^11.0.1"
   },
   "devDependencies": {

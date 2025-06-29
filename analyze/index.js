@@ -669,6 +669,14 @@ module.exports = async function (context, req) {
                     duplicateCount: duplicateCount,
                     message: `${duplicateCount}개의 업종이 발견되었습니다. 분석할 업종을 선택해주세요.`,
                     industryOptions: industryOptions, // 기존 호환성 유지
+                    // 🚀 **API 버전 및 배포 정보 추가**
+                    apiInfo: {
+                        version: "1.0.1",
+                        deployedAt: "2025-06-29",
+                        endpoint: "analyze",
+                        performance: "v15-optimized",
+                        status: "🔴 LIVE"
+                    },
                     queryInfo: {
                         table: 'insu_clean',
                         executionTime: `${executionTime}ms`,
@@ -725,6 +733,14 @@ module.exports = async function (context, req) {
             mode: "full-analysis",
             duplicateCount: duplicateCount, // 🔥 **중복횟수 정보 추가**
             selectedRecordId: recordId || companyData.recordId, // 🔥 **선택된 레코드 ID**
+            // 🚀 **API 버전 및 배포 정보 추가**
+            apiInfo: {
+                version: "1.0.1",
+                deployedAt: "2025-06-29",
+                endpoint: "analyze",
+                performance: "v15-optimized",
+                status: "🔴 LIVE"
+            },
             queryInfo: {
                 table: 'insu_clean',
                 executionTime: `${executionTime}ms`,
@@ -761,6 +777,14 @@ module.exports = async function (context, req) {
                 success: false,
                 bizno: req.query.bizno || (req.body && req.body.bizno) || 'unknown',
                 error: '세액공제 분석 중 오류가 발생했습니다: ' + error.message,
+                // 🚀 **API 버전 및 배포 정보 추가**
+                apiInfo: {
+                    version: "1.0.1",
+                    deployedAt: "2025-06-29",
+                    endpoint: "analyze",
+                    performance: "v15-optimized",
+                    status: "🔴 LIVE"
+                },
                 timestamp: new Date().toISOString()
             }
         };
